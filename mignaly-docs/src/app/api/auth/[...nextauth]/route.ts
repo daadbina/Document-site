@@ -1,9 +1,15 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, Role } from "@prisma/client"
 import bcrypt from "bcryptjs"
+import { User } from "next-auth"
 
 const prisma = new PrismaClient()
+
+// Extend the User type to include role
+interface ExtendedUser extends User {
+  role?: Role
+}
 
 const handler = NextAuth({
   providers: [
@@ -55,7 +61,8 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
-        token.role = user.role
+        // Cast user to ExtendedUser to access the role property
+        token.role = (user as ExtendedUser).role
       }
       return token
     },
