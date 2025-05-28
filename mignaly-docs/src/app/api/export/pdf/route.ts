@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Readable } from 'stream'
-import * as puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer'
 
 // POST /api/export/pdf - Export a document as PDF
 export async function POST(request: NextRequest) {
@@ -156,8 +156,9 @@ export async function POST(request: NextRequest) {
     
     // Generate PDF using Puppeteer
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: 'new',
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     })
     
     const page = await browser.newPage()

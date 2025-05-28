@@ -12,6 +12,8 @@ services:
       - DATABASE_URL=mongodb://mongodb:27050/mignaly
       - NEXTAUTH_SECRET=your-secret-key-here
       - NEXTAUTH_URL=http://localhost:3434
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
     depends_on:
       - mongodb
     restart: always

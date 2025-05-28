@@ -1,6 +1,6 @@
 FROM node:18-alpine AS base
 
-# Install dependencies for Puppeteer
+# Install dependencies for Puppeteer and OpenSSL for Prisma
 RUN apk add --no-cache \
     chromium \
     nss \
@@ -10,7 +10,9 @@ RUN apk add --no-cache \
     ca-certificates \
     ttf-freefont \
     nodejs \
-    yarn
+    yarn \
+    openssl \
+    openssl-dev
 
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
