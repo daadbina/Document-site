@@ -6,12 +6,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3434:3434"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=mongodb://mongodb:27017/mignaly
+      - DATABASE_URL=mongodb://mongodb:27050/mignaly
       - NEXTAUTH_SECRET=your-secret-key-here
-      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_URL=http://localhost:3434
     depends_on:
       - mongodb
     restart: always
@@ -21,7 +21,7 @@ services:
   mongodb:
     image: mongo:latest
     ports:
-      - "27017:27017"
+      - "27050:27017"
     volumes:
       - mongodb_data:/data/db
       - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro

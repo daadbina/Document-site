@@ -35,9 +35,9 @@ ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Create .env file with database URL and other environment variables
-RUN echo "DATABASE_URL=mongodb://mongodb:27017/mignaly" > .env
+RUN echo "DATABASE_URL=mongodb://mongodb:27050/mignaly" > .env
 RUN echo "NEXTAUTH_SECRET=your-secret-key-here" >> .env
-RUN echo "NEXTAUTH_URL=http://localhost:3000" >> .env
+RUN echo "NEXTAUTH_URL=http://localhost:3434" >> .env
 RUN echo "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true" >> .env
 RUN echo "PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser" >> .env
 
@@ -71,9 +71,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.env ./
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 3434
 
-ENV PORT 3000
+ENV PORT 3434
 ENV HOSTNAME "0.0.0.0"
 
 # Add the command to run Prisma migrations
