@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String    @unique
+  password      String
+  image         String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  documents     Document[]
+  comments      Comment[]
+}
+
+model Document {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  slug          String    @unique
+  subtitle      String?
+  content       String
+  published     Boolean   @default(false)
+  featuredImage String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  version       Int       @default(1)
+  authorId      String    @db.ObjectId
+  author        User      @relation(fields: [authorId], references: [id])
+  category      Category? @relation(fields: [categoryId], references: [id])
+  categoryId    String?   @db.ObjectId
+  tags          Tag[]     @relation(fields: [tagIds], references: [id])
+  tagIds        String[]  @db.ObjectId
+  comments      Comment[]
+  versions      DocumentVersion[]
+}
+
+model DocumentVersion {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  documentId    String    @db.ObjectId
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  versionNumber Int
+  title         String
+  subtitle      String?
+  content       String
+  createdAt     DateTime  @default(now())
+}
+
+model Category {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String    @unique
+  slug          String    @unique
+  description   String?
+  documents     Document[]
+}
+
+model Tag {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String    @unique
+  slug          String    @unique
+  documents     Document[] @relation(fields: [documentIds], references: [id])
+  documentIds   String[]  @db.ObjectId
+}
+
+model Comment {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  content       String
+  documentId    String    @db.ObjectId
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  authorId      String    @db.ObjectId
+  author        User      @relation(fields: [authorId], references: [id])
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
