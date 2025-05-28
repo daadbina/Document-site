@@ -24,7 +24,10 @@ WORKDIR /app
 
 # Copy package.json and install dependencies
 COPY package.json ./
-RUN npm install
+# Install puppeteer and update deprecated packages
+RUN npm install puppeteer && \
+    npm install lru-cache uuid --save && \
+    npm install rimraf@latest glob@latest @eslint/object-schema @eslint/config-array eslint@latest --save-dev
 
 # Rebuild the source code only when needed
 FROM base AS builder
